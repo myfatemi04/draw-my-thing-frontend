@@ -1,0 +1,12 @@
+{
+  "name": "draw-my-thing-frontend",
+  "displayName": "draw-my-thing-frontend",
+  "expo": {
+    "name": "draw-my-thing-frontend",
+    "slug": "draw-my-thing-frontend",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
