@@ -1,18 +1,30 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useContext, useRef, useState } from "react";
 import { TextInput, View, Text, Button, StyleSheet } from "react-native";
+import InitializationContext from "../Initialization/InitializationContext";
 
 export default function BeforeGameLoadedScreen() {
   const textInput = useRef<TextInput>();
+  const [temporaryRoomID, setTemporaryRoomID] = useState("");
+  const { joinRoom } = useContext(InitializationContext);
+
   const onPress = useCallback(() => {
-    console.log("Button was pressed");
+    joinRoom(temporaryRoomID);
+  }, []);
+
+  const onChangeText = useCallback((text: string) => {
+    setTemporaryRoomID(text);
   }, []);
 
   return (
     <View style={styles.screen}>
       <Text>Test</Text>
-      <TextInput ref={textInput} maxLength={10} style={styles.text} />
-      <Button onPress={onPress} title="Join Game">
-        Join Game
+      <TextInput
+        onChangeText={onChangeText}
+        maxLength={10}
+        style={styles.text}
+      />
+      <Button onPress={onPress} title="Join">
+        Join
       </Button>
     </View>
   );

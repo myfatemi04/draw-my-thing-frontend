@@ -11,7 +11,7 @@ import InitializationContext, {
 import socketio from "socket.io-client";
 import useSocketCallback from "../hooks/useSocketCallback";
 
-const io = socketio({ host: "http://localhost:6666" });
+const io = socketio("localhost:6666");
 
 export default function InitializationProvider({
   children,
