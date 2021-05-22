@@ -8,10 +8,10 @@ import React, {
 import InitializationContext, {
   InitializationContextProps,
 } from "./InitializationContext";
-import socketio from "socket.io-client";
+import * as socketio from "socket.io-client";
 import useSocketCallback from "../hooks/useSocketCallback";
 
-const io = socketio("localhost:6666");
+const io = socketio.io("http://localhost:7000/");
 
 export default function InitializationProvider({
   children,
@@ -21,7 +21,7 @@ export default function InitializationProvider({
   const [currentRoomID, setCurrentRoomID] = useState<string>(null);
   const [connectionStatus, setConnectionStatus] =
     useState<null | "connecting" | "connected" | "errored">(null);
-  const connectionTimeout = useRef<number>();
+  const connectionTimeout = useRef<NodeJS.Timeout>();
 
   const joinRoom = useCallback((roomID: string) => {
     connectionTimeout.current = setTimeout(() => {

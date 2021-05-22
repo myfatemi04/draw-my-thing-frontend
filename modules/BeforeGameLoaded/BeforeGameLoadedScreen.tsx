@@ -5,10 +5,14 @@ import InitializationContext from "../Initialization/InitializationContext";
 export default function BeforeGameLoadedScreen() {
   const textInput = useRef<TextInput>();
   const [temporaryRoomID, setTemporaryRoomID] = useState("");
-  const { joinRoom } = useContext(InitializationContext);
+  const { joinRoom, createRoom } = useContext(InitializationContext);
 
-  const onPress = useCallback(() => {
+  const onPressJoin = useCallback(() => {
     joinRoom(temporaryRoomID);
+  }, []);
+
+  const onPressCreate = useCallback(() => {
+    createRoom();
   }, []);
 
   const onChangeText = useCallback((text: string) => {
@@ -17,14 +21,17 @@ export default function BeforeGameLoadedScreen() {
 
   return (
     <View style={styles.screen}>
-      <Text>Test</Text>
+      <Text>Draw My Thing</Text>
       <TextInput
         onChangeText={onChangeText}
         maxLength={10}
         style={styles.text}
       />
-      <Button onPress={onPress} title="Join">
+      <Button onPress={onPressJoin} title="Join">
         Join
+      </Button>
+      <Button onPress={onPressCreate} title="Create">
+        Create
       </Button>
     </View>
   );
@@ -39,7 +46,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 2,
 
-    marginTop: "1em",
-    marginBottom: "1em",
+    marginTop: "1rem",
+    marginBottom: "1rem",
+  },
+  button: {
+    marginTop: "1rem",
+    marginBottom: "1rem",
   },
 });
