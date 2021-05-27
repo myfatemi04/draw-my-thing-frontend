@@ -13,7 +13,7 @@ class CanvasSDK {
   private width: number;
   private height: number;
 
-  constructor(canvas: Canvas) {
+  setCanvas(canvas: Canvas) {
     this.context = canvas.getContext("2d");
     this.width = canvas.width;
     this.height = canvas.height;

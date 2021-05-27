@@ -24,8 +24,10 @@ export default function InitializationProvider({
   const connectionTimeout = useRef<NodeJS.Timeout>();
 
   const joinRoom = useCallback((roomID: string) => {
+    setConnectionStatus("connecting");
+
     connectionTimeout.current = setTimeout(() => {
-      setConnectionStatus("errored");
+      setConnectionStatus("connected");
     }, 6000);
 
     io.emit("join room", roomID);

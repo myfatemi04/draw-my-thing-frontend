@@ -4,10 +4,14 @@ import InitializationContext from "../Initialization/InitializationContext";
 
 export default function BeforeGameLoadedScreen() {
   const [temporaryRoomID, setTemporaryRoomID] = useState("");
-  const { joinRoom, createRoom } = useContext(InitializationContext);
+  const { joinRoom, createRoom, connectionStatus } = useContext(
+    InitializationContext
+  );
 
   const onPressJoin = useCallback(() => {
-    joinRoom(temporaryRoomID);
+    if (temporaryRoomID.length > 0) {
+      joinRoom(temporaryRoomID);
+    }
   }, []);
 
   const onPressCreate = useCallback(() => {
@@ -18,6 +22,9 @@ export default function BeforeGameLoadedScreen() {
     setTemporaryRoomID(text);
   }, []);
 
+  const joinButtonString =
+    connectionStatus === "connecting" ? "Joining..." : "Join";
+
   return (
     <View style={styles.screen}>
       <Text>Draw My Thing</Text>
@@ -26,12 +33,12 @@ export default function BeforeGameLoadedScreen() {
         maxLength={10}
         style={styles.text}
       />
-      <Button onPress={onPressJoin} title="Join">
-        Join
-      </Button>
-      <Button onPress={onPressCreate} title="Create">
-        Create
-      </Button>
+      <Button
+        onPress={onPressJoin}
+        title="Join"
+        disabled={temporaryRoomID.length === 0}
+      />
+      <Button onPress={onPressCreate} title="Create" />
     </View>
   );
 }
@@ -45,11 +52,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 2,
 
-    marginTop: "10pt",
-    marginBottom: "10pt",
+    marginTop: 50,
+    marginBottom: 50,
   },
   button: {
-    marginTop: "10pt",
-    marginBottom: "10pt",
+    marginTop: 50,
+    marginBottom: 50,
   },
 });

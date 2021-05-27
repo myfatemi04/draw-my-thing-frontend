@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useMemo, useRef } from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Canvas from "react-native-canvas";
 import CanvasSDK from "./CanvasSDK";
 
@@ -9,7 +9,7 @@ export default function Game() {
 
   useLayoutEffect(() => {
     if (canvas.current) {
-      sdk.setNativeCanvas(canvas.current.getContext("2d"));
+      sdk.setCanvas(canvas.current);
     }
   }, []);
 
