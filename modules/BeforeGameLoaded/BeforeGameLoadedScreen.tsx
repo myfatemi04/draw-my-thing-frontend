@@ -3,7 +3,6 @@ import { TextInput, View, Text, Button, StyleSheet } from "react-native";
 import InitializationContext from "../Initialization/InitializationContext";
 
 export default function BeforeGameLoadedScreen() {
-  const textInput = useRef<TextInput>();
   const [temporaryRoomID, setTemporaryRoomID] = useState("");
   const { joinRoom, createRoom } = useContext(InitializationContext);
 
@@ -46,11 +45,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 2,
 
-    marginTop: "1rem",
-    marginBottom: "1rem",
+    marginTop: "10pt",
+    marginBottom: "10pt",
   },
   button: {
-    marginTop: "1rem",
-    marginBottom: "1rem",
+    marginTop: "10pt",
+    marginBottom: "10pt",
   },
 });

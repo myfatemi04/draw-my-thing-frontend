@@ -1,10 +1,13 @@
 import { createContext } from "react";
 
+export type ConnectionStatus = null | "connecting" | "connected" | "errored";
+
 export type InitializationContextProps = {
   joinRoom(roomID: string): void;
   createRoom(): void;
   leaveRoom(): void;
   currentRoomID: string;
+  connectionStatus: ConnectionStatus;
 };
 
 function notImplemented(name: string) {
@@ -18,6 +21,7 @@ const InitializationContext = createContext<InitializationContextProps>({
   createRoom: notImplemented("createRoom"),
   leaveRoom: notImplemented("leaveRoom"),
   currentRoomID: null,
+  connectionStatus: null,
 });
 
 export default InitializationContext;

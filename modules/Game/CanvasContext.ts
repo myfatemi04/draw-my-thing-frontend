@@ -6,7 +6,7 @@ export type GameContextProps = {
 };
 
 const CanvasContext = createContext<GameContextProps>({
-  canvasSDK: new CanvasSDK(),
+  canvasSDK: new CanvasSDK(null),
 });
 
 export default CanvasContext;

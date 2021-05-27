@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import BeforeGameLoadedScreen from "./modules/BeforeGameLoaded/BeforeGameLoadedScreen";
+import GameMain from "./modules/GameMain/GameMain";
 import InitializationProvider from "./modules/Initialization/InitializationProvider";
 
 export default function App() {
-  const [gameID, setGameID] = useState<string>();
-
   return (
     <View style={styles.container}>
       <InitializationProvider>
-        {gameID == null && <BeforeGameLoadedScreen />}
+        <GameMain />
       </InitializationProvider>
     </View>
   );

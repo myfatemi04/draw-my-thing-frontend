@@ -52,6 +52,7 @@ export default function InitializationProvider({
       leaveRoom,
       createRoom,
       currentRoomID,
+      connectionStatus,
     };
   }, []);
 
