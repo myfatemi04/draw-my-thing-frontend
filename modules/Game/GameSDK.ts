@@ -1,3 +1,4 @@
+import { Color } from "./ColorPicker";
 import GameState from "./GameState";
 
 type GameEvents = {
@@ -140,6 +141,10 @@ class GameSDK {
   sendPathMove(x: number, y: number) {}
 
   sendPathEnd() {}
+
+  sendColorChange(color: Color) {}
+
+  sendCanvasClear() {}
 
   sendChatMessage(content: string) {}
 }

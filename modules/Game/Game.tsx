@@ -12,10 +12,12 @@ import UIRow from "../ui/UIRow";
 import UIText from "../ui/UIText";
 import CanvasSDK from "./CanvasSDK";
 import ColorPicker, { Color } from "./ColorPicker";
+import GameContext from "./GameContext";
 
 export default function Game() {
   const [canvas, setCanvas] = useState<Canvas>();
-  const sdk = useMemo(() => new CanvasSDK(), []);
+  const canvasSDK = useMemo(() => new CanvasSDK(), []);
+  const { gameSDK } = useContext(GameContext);
   const { leaveRoom } = useContext(InitializationContext);
 
   const [touchCounter, setTouchCounter] = useState(0);
@@ -24,51 +26,55 @@ export default function Game() {
 
   useEffect(() => {
     if (canvas) {
-      sdk.setCanvas(canvas);
+      canvasSDK.setCanvas(canvas);
     }
   }, [canvas]);
 
   useEffect(() => {
-    sdk.setStrokeColor(color);
-  }, [color]);
+    canvasSDK.setStrokeColor(color);
+    gameSDK.sendColorChange(color);
+  }, [canvasSDK, gameSDK, color]);
 
   const onTouchStart = useCallback<ViewProps["onTouchStart"]>(
     (event) => {
       setTouchCounter((t) => t + 1);
       if (touchIdentifier == null) {
         setTouchIdentifier(event.nativeEvent.identifier);
-        const { locationX, locationY } = event.nativeEvent;
-        sdk.startPath(locationX, locationY);
+        const { locationX: x, locationY: y } = event.nativeEvent;
+        canvasSDK.startPath(x, y);
+        gameSDK.sendPathStart(x, y);
       }
     },
-    [sdk, touchIdentifier]
+    [canvasSDK, gameSDK, touchIdentifier]
   );
 
   const onTouchMove = useCallback<ViewProps["onTouchMove"]>(
     (event) => {
       if (touchIdentifier == event.nativeEvent.identifier) {
-        const { locationX, locationY } = event.nativeEvent;
-        sdk.moveTo(locationX, locationY);
+        const { locationX: x, locationY: y } = event.nativeEvent;
+        canvasSDK.moveTo(x, y);
+        gameSDK.sendPathMove(x, y);
       }
     },
-    [sdk, touchIdentifier]
+    [canvasSDK, gameSDK, touchIdentifier]
   );
 
   const onTouchEnd = useCallback<ViewProps["onTouchEnd"]>(
     (event) => {
       if (touchIdentifier == event.nativeEvent.identifier) {
         setTouchIdentifier(null);
-        sdk.endPath();
+        canvasSDK.endPath();
+        gameSDK.sendPathEnd();
       }
       setTouchCounter((t) => t - 1);
     },
-    [sdk, touchIdentifier]
+    [canvasSDK, gameSDK, touchIdentifier]
   );
 
   const clear = useCallback(() => {
-    sdk.clear();
-    // TODO add code that sends 'clear' command to server
-  }, [sdk]);
+    canvasSDK.clear();
+    gameSDK.sendCanvasClear();
+  }, [canvasSDK]);
 
   return (
     <View style={styles.game}>
@@ -80,7 +86,7 @@ export default function Game() {
       <View
         onLayout={({ nativeEvent }) => {
           const { width, height } = nativeEvent.layout;
-          sdk.setSize(width, height);
+          canvasSDK.setSize(width, height);
         }}
         style={styles.canvas}
         onTouchStart={onTouchStart}
