@@ -10,16 +10,28 @@ type CanvasComponent = {
 };
 
 class CanvasSDK {
+  private canvas: Canvas;
   private context: CanvasRenderingContext2D;
-  private width: number;
-  private height: number;
+
+  // Default size
+  private width = 300;
+  private height = 150;
 
   setCanvas(canvas: Canvas) {
+    this.canvas = canvas;
     this.context = canvas.getContext("2d");
-    this.width = canvas.width;
-    this.height = canvas.height;
+    canvas.width = this.width;
+    canvas.height = this.height;
     this.setColor("black");
     this.context.fillRect(0, 0, 50, 50);
+  }
+
+  setSize(width: number, height: number) {
+    this.width = width;
+    this.height = height;
+    this.canvas.width = width;
+    this.canvas.height = height;
+    console.log("[canvas size]", `${this.width} x ${this.height}`);
   }
 
   setColor(color: string) {

@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { StyleSheet, View, Text, Button } from "react-native";
+import { StyleSheet, View, Text, Button, Dimensions } from "react-native";
 import Canvas from "react-native-canvas";
 import InitializationContext from "../Initialization/InitializationContext";
 import UIRow from "../ui/UIRow";
@@ -34,6 +34,11 @@ export default function Game() {
         {touchIdentifier && `Active ID: ${touchIdentifier}`}
       </UIText>
       <View
+        onLayout={(event) => {
+          const { width, height } = event.nativeEvent.layout;
+
+          sdk.setSize(width, height);
+        }}
         style={styles.canvas}
         onTouchStart={(event) => {
           setTouchCounter((t) => t + 1);
@@ -57,7 +62,13 @@ export default function Game() {
           setTouchCounter((t) => t - 1);
         }}
       >
-        <Canvas ref={canvas} />
+        <Canvas
+          ref={canvas}
+          style={{
+            width: "100%",
+            height: "100%",
+          }}
+        />
       </View>
       <UIRow spacing={20} centerHorizontal>
         <Button onPress={() => leaveRoom()} title="Leave" />
