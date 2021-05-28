@@ -4,6 +4,7 @@ class Player extends immutable.Record({
   id: "",
   nickname: "",
   points: 0,
+  guessedCorrectlyThisQuestion: false,
 }) {
   constructor(id: string, nickname: string, points = 0) {
     if (!id) {

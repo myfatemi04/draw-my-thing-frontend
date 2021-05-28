@@ -1,7 +1,11 @@
+import replaceStringCharacter from "../lib/replaceStringCharacter";
+import ChatMessage from "./ChatMessage";
 import { Color } from "./ColorPicker";
 import GameState from "./GameState";
+import Player from "./Player";
+import * as immutable from "immutable";
 
-type GameEvents = {
+export type GameEvents = {
   /**
    * Signals that the current player put the paintbrush down.
    */
@@ -40,11 +44,6 @@ type GameEvents = {
   "point-update": [string, number]; // player id, point count
 
   /**
-   * Signals the length of the hint.
-   */
-  "hint-length": [number]; // length
-
-  /**
    * Reveals one letter of the hint.
    */
   "hint-reveal": [number, string]; // index, letter
@@ -52,7 +51,7 @@ type GameEvents = {
   /**
    * Signals the start of a question.
    */
-  "question-started": [number, number]; // question number, hint length
+  "question-started": [string, number, number, number]; // player id, question number, hint length, end time
 
   /**
    * Signals the end of a question.
@@ -62,7 +61,7 @@ type GameEvents = {
   /**
    * Signals the start of a round.
    */
-  "round-started": [number, number]; // player id, start time, current question
+  "round-started": [number]; // current round
 
   /**
    * Signals the end of a round.
@@ -72,7 +71,7 @@ type GameEvents = {
   /**
    * Signals the start of a game.
    */
-  "game-started": [];
+  "game-started": [number]; // total round count
 
   /**
    * Signals the end of a game.
@@ -147,6 +146,118 @@ class GameSDK {
   sendCanvasClear() {}
 
   sendChatMessage(content: string) {}
+
+  addPlayer(id: string, nickname: string, points = 0) {
+    const player = new Player(id, nickname, points);
+    const players = this.state.players.set(id, player);
+    this.state = this.state.set("players", players);
+  }
+
+  removePlayer(id: string) {
+    const players = this.state.players.delete(id);
+    this.state = this.state.set("players", players);
+  }
+
+  setPlayers(players: [string, string][]) {
+    const playerList: [string, Player][] = [];
+    for (let [id, nickname] of players) {
+      playerList.push([id, new Player(id, nickname)]);
+    }
+    const playerMap = immutable.Map(playerList);
+    this.state = this.state.set("players", playerMap);
+  }
+
+  setPlayerPoints(id: string, points: number) {
+    const player = this.state.players.get(id).set("points", points);
+    const players = this.state.players.set(id, player);
+    return players;
+  }
+
+  setLocalUserID(id: string) {
+    this.state = this.state.set("localUserID", id);
+  }
+
+  setLocalNickname(nickname: string) {
+    this.state = this.state.set("localNickname", nickname);
+  }
+
+  setGameState(state: GameState["state"]) {
+    this.state = this.state.set("state", state);
+  }
+
+  gameStarted(roundCount: number) {
+    this.state = this.state
+      .set("state", "playing")
+      .set("roundCount", roundCount);
+  }
+
+  gameEnded() {
+    this.state = this.state.set("state", "ended");
+  }
+
+  setRoundNumber(roundNumber: number) {
+    this.state = this.state.set("roundNumber", roundNumber);
+  }
+
+  setCurrentQuestion(
+    playerID: string,
+    questionNumber: number,
+    hintLength: number,
+    endTime: number
+  ) {
+    this.state = this.state
+      .set("questionNumber", questionNumber)
+      .set("currentQuestionPlayerID", playerID)
+      .set("hintText", "_".repeat(hintLength))
+      .set("currentQuestionEndTime", endTime);
+  }
+
+  setLastQuestionAnswer(answer: string) {
+    this.state = this.state.set("lastQuestionAnswer", answer);
+  }
+
+  setHintText(text: string) {
+    this.state = this.state.set("hintText", text);
+  }
+
+  revealHintLetter(index: number, letter: string) {
+    const hint = replaceStringCharacter(this.state.hintText, index, letter);
+    this.state = this.state.set("hintText", hint);
+  }
+
+  playerGuessedCorrectly(playerID: string) {
+    this.state = this.state.set(
+      "players",
+      this.state.players.set(
+        playerID,
+        this.state.players
+          .get(playerID)
+          .set("guessedCorrectlyThisQuestion", true)
+      )
+    );
+  }
+
+  // TODO: implement playerAlmostGuessedCorrectly
+  playerAlmostGuessedCorrectly() {
+    throw new Error("Not implemented: playerAlmostGuessedCorrectly()");
+  }
+
+  correctlyGuessedThisQuestion() {
+    this.state = this.state.set("guessedCorrectlyThisQuestion", true);
+  }
+
+  resetCorrectlyGuessedThisQuestion() {
+    this.state = this.state.set("guessedCorrectlyThisQuestion", false);
+  }
+
+  addChatMessage(playerID: string, messageContent: string) {
+    const message = new ChatMessage({
+      senderID: playerID,
+      content: messageContent,
+    });
+    const chatMessages = this.state.chatMessages.push(message);
+    this.state = this.state.set("chatMessages", chatMessages);
+  }
 }
 
 export default GameSDK;

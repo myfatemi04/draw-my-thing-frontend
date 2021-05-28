@@ -10,8 +10,12 @@ export type GameStateProps = {
   hintText: string;
   questionNumber: number;
   roundNumber: number;
+  roundCount: number;
   guessedCorrectlyThisQuestion: boolean;
   chatMessages: immutable.List<ChatMessage>;
+  lastQuestionAnswer: string;
+  currentQuestionPlayerID: string;
+  currentQuestionEndTime: number;
 };
 
 class GameState extends immutable.Record<GameStateProps>({
@@ -22,8 +26,12 @@ class GameState extends immutable.Record<GameStateProps>({
   hintText: "",
   questionNumber: 0,
   roundNumber: 0,
+  roundCount: 0,
   guessedCorrectlyThisQuestion: false,
   chatMessages: immutable.List(),
+  lastQuestionAnswer: "",
+  currentQuestionPlayerID: "",
+  currentQuestionEndTime: -1,
 }) {}
 
 export default GameState;

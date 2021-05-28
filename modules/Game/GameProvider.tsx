@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import React, { ReactNode, useEffect, useMemo, useState } from "react";
 import GameContext from "./GameContext";
 import GameSDK from "./GameSDK";
 import GameState from "./GameState";

@@ -28,7 +28,7 @@ export default function Game() {
     if (canvas) {
       canvasSDK.setCanvas(canvas);
     }
-  }, [canvas]);
+  }, [canvasSDK, canvas]);
 
   useEffect(() => {
     canvasSDK.setStrokeColor(color);
