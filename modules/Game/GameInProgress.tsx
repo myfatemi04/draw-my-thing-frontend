@@ -1,13 +1,11 @@
-import React, { useContext } from "react";
-import { Button, StyleSheet, View } from "react-native";
-import InitializationContext from "../Initialization/InitializationContext";
-import UIRow from "../ui/UIRow";
+import React from "react";
+import { StyleSheet, View } from "react-native";
 import UIText from "../ui/UIText";
 import CanvasDrawingSurface from "./CanvasDrawingSurface";
 import { useCurrentPlayerID, useLocalPlayerID } from "./GameHooks";
+import LeaveGameButton from "./LeaveGameButton";
 
 function GameInProgress() {
-  const { leaveRoom } = useContext(InitializationContext);
   const currentPlayerID = useCurrentPlayerID();
   const localPlayerID = useLocalPlayerID();
   const localPlayerIsDrawing = localPlayerID == currentPlayerID;
@@ -16,9 +14,6 @@ function GameInProgress() {
     <View style={styles.game}>
       <UIText variant="header">Game</UIText>
       <CanvasDrawingSurface active={localPlayerIsDrawing} />
-      <UIRow spacing={20} centerHorizontal>
-        <Button onPress={() => leaveRoom()} title="Leave" />
-      </UIRow>
     </View>
   );
 }
