@@ -34,17 +34,23 @@ class CanvasSDK {
 
   startPath(x: number, y: number) {
     if (this.context) {
+      this.context.beginPath();
       this.context.moveTo(x, y);
-      this.context.rect(x, y, 5, 5);
     }
   }
 
   moveTo(x: number, y: number) {
-    this.context.lineTo(x, y);
-    this.context.stroke();
+    if (this.context) {
+      this.context.lineTo(x, y);
+      this.context.stroke();
+    }
   }
 
-  endPath() {}
+  endPath() {
+    if (this.context) {
+      this.context.closePath();
+    }
+  }
 
   addCircle(x: number, y: number, radius: number) {
     if (this.context) {

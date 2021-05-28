@@ -8,6 +8,7 @@ import React, {
 import { StyleSheet, View, Text, Button } from "react-native";
 import Canvas from "react-native-canvas";
 import InitializationContext from "../Initialization/InitializationContext";
+import UIRow from "../ui/UIRow";
 import UIText from "../ui/UIText";
 import CanvasSDK from "./CanvasSDK";
 
@@ -17,7 +18,7 @@ export default function Game() {
   const { leaveRoom } = useContext(InitializationContext);
 
   const [touchCounter, setTouchCounter] = useState(0);
-  const [invalid, setInvalid] = useState(false);
+  const [touchIdentifier, setTouchIdentifier] = useState<string>(null);
 
   useLayoutEffect(() => {
     if (canvas.current) {
@@ -27,29 +28,41 @@ export default function Game() {
 
   return (
     <View style={styles.game}>
-      <UIText variant="header">Game {invalid && "invalid"}</UIText>
+      <UIText variant="header">Game</UIText>
       <UIText variant="body">
-        {touchCounter} touch{touchCounter !== 1 ? "es" : ""}
+        {touchCounter} touch{touchCounter !== 1 ? "es" : ""}.{" "}
+        {touchIdentifier && `Active ID: ${touchIdentifier}`}
       </UIText>
       <View
         style={styles.canvas}
         onTouchStart={(event) => {
           setTouchCounter((t) => t + 1);
-          const { locationX, locationY } = event.nativeEvent;
-          sdk.startPath(locationX, locationY);
+          if (touchIdentifier == null) {
+            setTouchIdentifier(event.nativeEvent.identifier);
+            const { locationX, locationY } = event.nativeEvent;
+            sdk.startPath(locationX, locationY);
+          }
         }}
         onTouchMove={(event) => {
-          const { locationX, locationY } = event.nativeEvent;
-          sdk.moveTo(locationX, locationY);
+          if (touchIdentifier == event.nativeEvent.identifier) {
+            const { locationX, locationY } = event.nativeEvent;
+            sdk.moveTo(locationX, locationY);
+          }
         }}
         onTouchEnd={(event) => {
-          sdk.endPath();
+          if (touchIdentifier == event.nativeEvent.identifier) {
+            setTouchIdentifier(null);
+            sdk.endPath();
+          }
           setTouchCounter((t) => t - 1);
         }}
       >
         <Canvas ref={canvas} />
       </View>
-      <Button onPress={leaveRoom} title="Leave" />
+      <UIRow spacing={20} centerHorizontal>
+        <Button onPress={() => leaveRoom()} title="Leave" />
+        <Button onPress={() => sdk.clear()} title="Clear" />
+      </UIRow>
     </View>
   );
 }
