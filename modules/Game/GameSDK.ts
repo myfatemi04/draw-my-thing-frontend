@@ -15,6 +15,13 @@ type GameEvents = {
   "path-ended": [];
 
   /**
+   * Signals the list of players currently in the room.
+   */
+  "player-list": [
+    [string, string][] // array of id, nickname
+  ];
+
+  /**
    * Signals that a player joined.
    */
   "player-joined": [string, string]; // id, nickname
@@ -58,6 +65,19 @@ type GameEvents = {
    * Signals the end of a round.
    */
   "round-ended": [number, number]; // questions answered correctly, total questions given
+
+  /**
+   * Signals the start of a game.
+   */
+  "game-started": [];
+
+  /**
+   * Signals the end of a game.
+   */
+  "game-ended": [
+    [string, string, string], // top three player ids
+    { [playerID: string]: number } // point counts of each player
+  ];
 
   /**
    * Signals that a player sent a chat message.
