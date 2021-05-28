@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction } from "react";
 import Canvas, { CanvasRenderingContext2D } from "react-native-canvas";
 
 type CanvasComponent = {
@@ -17,25 +16,30 @@ class CanvasSDK {
   private width = 300;
   private height = 150;
 
+  private strokeColor = "black";
+
   setCanvas(canvas: Canvas) {
     this.canvas = canvas;
+    this.canvas.width = this.width;
+    this.canvas.height = this.height;
     this.context = canvas.getContext("2d");
-    canvas.width = this.width;
-    canvas.height = this.height;
-    this.setStrokeColor("black");
-    this.context.fillRect(0, 0, 50, 50);
+    this.context.strokeStyle = this.strokeColor;
   }
 
   setSize(width: number, height: number) {
     this.width = width;
     this.height = height;
-    this.canvas.width = width;
-    this.canvas.height = height;
-    console.log("[canvas size]", `${this.width} x ${this.height}`);
+    if (this.canvas) {
+      this.canvas.width = width;
+      this.canvas.height = height;
+    }
   }
 
   setStrokeColor(color: string) {
-    this.context.strokeStyle = color;
+    this.strokeColor = color;
+    if (this.context) {
+      this.context.strokeStyle = color;
+    }
   }
 
   clear() {
