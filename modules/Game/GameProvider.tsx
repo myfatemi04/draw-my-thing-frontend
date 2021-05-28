@@ -12,7 +12,7 @@ import GameSDK from "./GameSDK";
 import GameState from "./GameState";
 
 function GameProvider({ children }: { children: ReactNode }) {
-  const [gameState, setGameState] = useState<GameState>();
+  const [gameState, setGameState] = useState<GameState>(() => new GameState());
   const canvasSDK = useMemo(() => new CanvasSDK(), []);
   const gameSDK = useMemo(() => new GameSDK(), []);
   const gameController = useMemo(() => new GameController(), []);

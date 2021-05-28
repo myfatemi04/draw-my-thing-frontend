@@ -4,7 +4,7 @@ import Canvas from "react-native-canvas";
 import ColorPicker, { Color } from "./ColorPicker";
 import GameContext from "./GameContext";
 
-function CanvasDrawingSurface() {
+function CanvasDrawingSurface({ active }: { active: boolean }) {
   const { canvasSDK, gameController } = useContext(GameContext);
 
   const [touchIdentifier, setTouchIdentifier] = useState<string>(null);
@@ -57,9 +57,11 @@ function CanvasDrawingSurface() {
   }, [canvasSDK]);
 
   useEffect(() => {
-    canvasSDK.setStrokeColor(color);
-    gameController.sendColorChange(color);
-  }, [canvasSDK, gameController, color]);
+    if (active) {
+      canvasSDK.setStrokeColor(color);
+      gameController.sendColorChange(color);
+    }
+  }, [canvasSDK, gameController, color, active]);
 
   return (
     <>
@@ -69,14 +71,25 @@ function CanvasDrawingSurface() {
           canvasSDK.setSize(width, height);
         }}
         style={styles.canvasContainer}
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
+        {...(active
+          ? {
+              onTouchStart,
+              onTouchMove,
+              onTouchEnd,
+            }
+          : {})}
       >
         <Canvas ref={setCanvas} style={styles.canvasContainer} />
       </View>
-      <ColorPicker color={color} onPickedColor={(color) => setColor(color)} />
-      <Button onPress={() => clear()} title="Clear" />
+      {active && (
+        <>
+          <ColorPicker
+            color={color}
+            onPickedColor={(color) => setColor(color)}
+          />
+          <Button onPress={() => clear()} title="Clear" />
+        </>
+      )}
     </>
   );
 }

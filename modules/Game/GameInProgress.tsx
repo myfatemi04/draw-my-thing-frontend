@@ -4,14 +4,18 @@ import InitializationContext from "../Initialization/InitializationContext";
 import UIRow from "../ui/UIRow";
 import UIText from "../ui/UIText";
 import CanvasDrawingSurface from "./CanvasDrawingSurface";
+import { useCurrentPlayerID, useLocalPlayerID } from "./GameHooks";
 
 function GameInProgress() {
   const { leaveRoom } = useContext(InitializationContext);
+  const currentPlayerID = useCurrentPlayerID();
+  const localPlayerID = useLocalPlayerID();
+  const localPlayerIsDrawing = localPlayerID == currentPlayerID;
 
   return (
     <View style={styles.game}>
       <UIText variant="header">Game</UIText>
-      <CanvasDrawingSurface />
+      <CanvasDrawingSurface active={localPlayerIsDrawing} />
       <UIRow spacing={20} centerHorizontal>
         <Button onPress={() => leaveRoom()} title="Leave" />
       </UIRow>

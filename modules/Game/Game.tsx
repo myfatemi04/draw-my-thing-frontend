@@ -1,5 +1,4 @@
 import React from "react";
-import { StyleSheet } from "react-native";
 import GameEnded from "./GameEnded";
 import { useGameState } from "./GameHooks";
 import GameInProgress from "./GameInProgress";
@@ -7,6 +6,8 @@ import Lobby from "./Lobby";
 
 function Game() {
   const state = useGameState();
+
+  console.log("Game state:", state);
 
   if (state === "waiting") {
     return <Lobby />;
