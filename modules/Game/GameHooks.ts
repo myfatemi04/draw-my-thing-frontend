@@ -12,3 +12,7 @@ export function useCurrentPlayerID() {
 export function useLocalPlayerID() {
   return useContext(GameContext).gameState.localUserID;
 }
+
+export function usePlayers() {
+  return useContext(GameContext).gameState.players;
+}
