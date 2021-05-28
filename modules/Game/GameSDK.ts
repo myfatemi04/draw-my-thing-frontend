@@ -1,3 +1,5 @@
+import GameState from "./GameState";
+
 type GameEvents = {
   /**
    * Signals that the current player put the paintbrush down.
@@ -93,10 +95,24 @@ type GameEvents = {
    * Signals that the guess most recently sent by the local player was almost correct.
    */
   "player-almost-guessed-correctly": [];
+
+  /**
+   * Emits a state update that can be observed by React.
+   */
+  "state-update": [GameState];
 };
 
 class GameSDK {
   private callbacks = new Map<keyof GameEvents, Set<Function>>();
+
+  private _state: GameState;
+  private set state(state: GameState) {
+    this._state = state;
+    this.emit("state-update", state);
+  }
+  private get state() {
+    return this._state;
+  }
 
   on<E extends keyof GameEvents>(
     event: E,
