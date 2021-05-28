@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from "react";
 import Canvas, { CanvasRenderingContext2D } from "react-native-canvas";
 
 type CanvasComponent = {
@@ -17,6 +18,8 @@ class CanvasSDK {
     this.context = canvas.getContext("2d");
     this.width = canvas.width;
     this.height = canvas.height;
+    this.setColor("black");
+    this.context.fillRect(0, 0, 50, 50);
   }
 
   setColor(color: string) {
@@ -24,11 +27,29 @@ class CanvasSDK {
   }
 
   clear() {
-    this.context.clearRect(0, 0, this.width, this.height);
+    if (this.context) {
+      this.context.clearRect(0, 0, this.width, this.height);
+    }
   }
 
+  startPath(x: number, y: number) {
+    if (this.context) {
+      this.context.moveTo(x, y);
+      this.context.rect(x, y, 5, 5);
+    }
+  }
+
+  moveTo(x: number, y: number) {
+    this.context.lineTo(x, y);
+    this.context.stroke();
+  }
+
+  endPath() {}
+
   addCircle(x: number, y: number, radius: number) {
-    this.context.ellipse(x, y, radius, radius, 0, 0, Math.PI * 2, false);
+    if (this.context) {
+      this.context.fillRect(x, y, radius, radius);
+    }
   }
 }
 

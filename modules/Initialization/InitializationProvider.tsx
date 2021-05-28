@@ -26,11 +26,18 @@ export default function InitializationProvider({
   const joinRoom = useCallback((roomID: string) => {
     setConnectionStatus("connecting");
 
-    connectionTimeout.current = setTimeout(() => {
+    setTimeout(() => {
       setConnectionStatus("connected");
-    }, 6000);
+    }, 1000);
+
+    setCurrentRoomID(roomID);
 
     io.emit("join room", roomID);
+  }, []);
+
+  const cancelJoinRoom = useCallback(() => {
+    setConnectionStatus(null);
+    setCurrentRoomID(null);
   }, []);
 
   useSocketCallback(io, "joined room", (roomID) => {
@@ -45,7 +52,10 @@ export default function InitializationProvider({
     setConnectionStatus(null);
   });
 
-  const leaveRoom = useCallback(() => {}, []);
+  const leaveRoom = useCallback(() => {
+    setCurrentRoomID(null);
+    setConnectionStatus(null);
+  }, []);
   const createRoom = useCallback(() => {}, []);
 
   const contextValue = useMemo<InitializationContextProps>(() => {
@@ -53,10 +63,11 @@ export default function InitializationProvider({
       joinRoom,
       leaveRoom,
       createRoom,
+      cancelJoinRoom,
       currentRoomID,
       connectionStatus,
     };
-  }, []);
+  }, [joinRoom, leaveRoom, createRoom, currentRoomID, connectionStatus]);
 
   return (
     <InitializationContext.Provider value={contextValue}>

@@ -6,6 +6,7 @@ export type InitializationContextProps = {
   joinRoom(roomID: string): void;
   createRoom(): void;
   leaveRoom(): void;
+  cancelJoinRoom(): void;
   currentRoomID: string;
   connectionStatus: ConnectionStatus;
 };
@@ -20,6 +21,7 @@ const InitializationContext = createContext<InitializationContextProps>({
   joinRoom: notImplemented("joinRoom"),
   createRoom: notImplemented("createRoom"),
   leaveRoom: notImplemented("leaveRoom"),
+  cancelJoinRoom: notImplemented("cancelJoinRoom"),
   currentRoomID: null,
   connectionStatus: null,
 });
