@@ -1,5 +1,6 @@
 import React, {
   useContext,
+  useEffect,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -11,6 +12,7 @@ import InitializationContext from "../Initialization/InitializationContext";
 import UIRow from "../ui/UIRow";
 import UIText from "../ui/UIText";
 import CanvasSDK from "./CanvasSDK";
+import ColorPicker, { Color } from "./ColorPicker";
 
 export default function Game() {
   const canvas = useRef<Canvas>();
@@ -19,12 +21,17 @@ export default function Game() {
 
   const [touchCounter, setTouchCounter] = useState(0);
   const [touchIdentifier, setTouchIdentifier] = useState<string>(null);
+  const [color, setColor] = useState<Color>("black");
 
   useLayoutEffect(() => {
     if (canvas.current) {
       sdk.setCanvas(canvas.current);
     }
   }, []);
+
+  useEffect(() => {
+    sdk.setStrokeColor(color);
+  }, [color]);
 
   return (
     <View style={styles.game}>
@@ -74,6 +81,7 @@ export default function Game() {
         <Button onPress={() => leaveRoom()} title="Leave" />
         <Button onPress={() => sdk.clear()} title="Clear" />
       </UIRow>
+      <ColorPicker color={color} onPickedColor={(color) => setColor(color)} />
     </View>
   );
 }
@@ -81,6 +89,8 @@ export default function Game() {
 const styles = StyleSheet.create({
   game: {
     padding: 40,
+    display: "flex",
+    flexDirection: "column",
   },
   canvas: {
     width: 400,

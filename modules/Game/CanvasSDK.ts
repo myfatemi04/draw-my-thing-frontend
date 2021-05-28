@@ -22,7 +22,7 @@ class CanvasSDK {
     this.context = canvas.getContext("2d");
     canvas.width = this.width;
     canvas.height = this.height;
-    this.setColor("black");
+    this.setStrokeColor("black");
     this.context.fillRect(0, 0, 50, 50);
   }
 
@@ -34,8 +34,8 @@ class CanvasSDK {
     console.log("[canvas size]", `${this.width} x ${this.height}`);
   }
 
-  setColor(color: string) {
-    this.context.fillStyle = color;
+  setStrokeColor(color: string) {
+    this.context.strokeStyle = color;
   }
 
   clear() {
