@@ -16,6 +16,8 @@ class CanvasSDK {
   private width = 300;
   private height = 150;
 
+  private inPath = false;
+
   private strokeColor = "black";
 
   setCanvas(canvas: Canvas) {
@@ -45,10 +47,27 @@ class CanvasSDK {
   clear() {
     if (this.context) {
       this.context.clearRect(0, 0, this.width, this.height);
+      this.breakPath();
+    }
+  }
+
+  private breakPath() {
+    if (this.context) {
+      if (this.inPath) {
+        this.context.closePath();
+        this.context.beginPath();
+      }
     }
   }
 
   startPath(x: number, y: number) {
+    if (this.inPath) {
+      console.warn(
+        "Starting path while already in a path. Should never happen. Breaking previous path."
+      );
+      this.breakPath();
+    }
+    this.inPath = true;
     if (this.context) {
       this.context.beginPath();
       this.context.moveTo(x, y);
@@ -56,6 +75,13 @@ class CanvasSDK {
   }
 
   moveTo(x: number, y: number) {
+    if (!this.inPath) {
+      console.warn(
+        "Moving to location while not in path. Should never happen. Starting path."
+      );
+      this.startPath(x, y);
+      return;
+    }
     if (this.context) {
       this.context.lineTo(x, y);
       this.context.stroke();
@@ -63,14 +89,14 @@ class CanvasSDK {
   }
 
   endPath() {
-    if (this.context) {
-      this.context.closePath();
-    }
-  }
-
-  addCircle(x: number, y: number, radius: number) {
-    if (this.context) {
-      this.context.fillRect(x, y, radius, radius);
+    if (!this.inPath) {
+      console.warn(
+        "Ending path while not in path. Should never happen, but this is a no-op."
+      );
+    } else {
+      if (this.context) {
+        this.context.closePath();
+      }
     }
   }
 }
