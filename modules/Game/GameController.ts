@@ -1,18 +1,37 @@
 import { Socket } from "socket.io-client";
 import CanvasSDK from "./CanvasSDK";
 import GameSDK, { GameEvents } from "./GameSDK";
+import { io as connect } from "socket.io-client";
+import { Color } from "./ColorPicker";
 
 /**
  * This controls the GameSDK based on what it receives from a socket connection
  */
 class GameController {
   private callbacks: Record<string, Function> = {};
+  private io: Socket;
+  private gameSDK: GameSDK;
+  private canvasSDK: CanvasSDK;
 
-  constructor(
-    private gameSDK: GameSDK,
-    private canvasSDK: CanvasSDK,
-    private io: Socket
-  ) {}
+  constructor() {}
+
+  setGameSDK(gameSDK: GameSDK) {
+    this.gameSDK = gameSDK;
+  }
+
+  setCanvasSDK(canvasSDK: CanvasSDK) {
+    this.canvasSDK = canvasSDK;
+  }
+
+  connect(gameServerURL: string) {
+    this.io = connect(gameServerURL);
+    this.addSocketCallbacks();
+  }
+
+  disconnect() {
+    this.removeSocketCallbacks();
+    this.io = null;
+  }
 
   addSocketCallbacks() {
     this.addSocketCallback("path-started", (x, y) => {
@@ -115,6 +134,30 @@ class GameController {
     // @ts-expect-error
     this.io.on(event, callback);
     this.callbacks[event] = callback;
+  }
+
+  sendPathStart(x: number, y: number) {
+    this.io.emit("path-start", x, y);
+  }
+
+  sendPathMove(x: number, y: number) {
+    this.io.emit("path-move", x, y);
+  }
+
+  sendPathEnd() {
+    this.io.emit("path-end");
+  }
+
+  sendColorChange(color: Color) {
+    this.io.emit("set-color", color);
+  }
+
+  sendCanvasClear() {
+    this.io.emit("clear-canvas");
+  }
+
+  sendChatMessage(content: string) {
+    this.io.emit("send-chat-message", content);
   }
 }
 

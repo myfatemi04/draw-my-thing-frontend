@@ -17,7 +17,7 @@ import GameContext from "./GameContext";
 export default function Game() {
   const [canvas, setCanvas] = useState<Canvas>();
   const canvasSDK = useMemo(() => new CanvasSDK(), []);
-  const { gameSDK } = useContext(GameContext);
+  const { gameController, gameState } = useContext(GameContext);
   const { leaveRoom } = useContext(InitializationContext);
 
   const [touchCounter, setTouchCounter] = useState(0);
@@ -32,8 +32,8 @@ export default function Game() {
 
   useEffect(() => {
     canvasSDK.setStrokeColor(color);
-    gameSDK.sendColorChange(color);
-  }, [canvasSDK, gameSDK, color]);
+    gameController.sendColorChange(color);
+  }, [canvasSDK, gameController, color]);
 
   const onTouchStart = useCallback<ViewProps["onTouchStart"]>(
     (event) => {
@@ -42,10 +42,10 @@ export default function Game() {
         setTouchIdentifier(event.nativeEvent.identifier);
         const { locationX: x, locationY: y } = event.nativeEvent;
         canvasSDK.startPath(x, y);
-        gameSDK.sendPathStart(x, y);
+        gameController.sendPathStart(x, y);
       }
     },
-    [canvasSDK, gameSDK, touchIdentifier]
+    [canvasSDK, gameController, touchIdentifier]
   );
 
   const onTouchMove = useCallback<ViewProps["onTouchMove"]>(
@@ -53,10 +53,10 @@ export default function Game() {
       if (touchIdentifier == event.nativeEvent.identifier) {
         const { locationX: x, locationY: y } = event.nativeEvent;
         canvasSDK.moveTo(x, y);
-        gameSDK.sendPathMove(x, y);
+        gameController.sendPathMove(x, y);
       }
     },
-    [canvasSDK, gameSDK, touchIdentifier]
+    [canvasSDK, gameController, touchIdentifier]
   );
 
   const onTouchEnd = useCallback<ViewProps["onTouchEnd"]>(
@@ -64,16 +64,16 @@ export default function Game() {
       if (touchIdentifier == event.nativeEvent.identifier) {
         setTouchIdentifier(null);
         canvasSDK.endPath();
-        gameSDK.sendPathEnd();
+        gameController.sendPathEnd();
       }
       setTouchCounter((t) => t - 1);
     },
-    [canvasSDK, gameSDK, touchIdentifier]
+    [canvasSDK, gameController, touchIdentifier]
   );
 
   const clear = useCallback(() => {
     canvasSDK.clear();
-    gameSDK.sendCanvasClear();
+    gameController.sendCanvasClear();
   }, [canvasSDK]);
 
   return (

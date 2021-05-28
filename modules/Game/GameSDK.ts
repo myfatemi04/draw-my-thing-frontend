@@ -135,18 +135,6 @@ class GameSDK {
     }
   }
 
-  sendPathStart(x: number, y: number) {}
-
-  sendPathMove(x: number, y: number) {}
-
-  sendPathEnd() {}
-
-  sendColorChange(color: Color) {}
-
-  sendCanvasClear() {}
-
-  sendChatMessage(content: string) {}
-
   addPlayer(id: string, nickname: string, points = 0) {
     const player = new Player(id, nickname, points);
     const players = this.state.players.set(id, player);
