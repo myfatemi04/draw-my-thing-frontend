@@ -1,4 +1,5 @@
 import * as immutable from "immutable";
+import ChatMessage from "./ChatMessage";
 import Player from "./Player";
 
 export type GameStateProps = {
@@ -10,6 +11,7 @@ export type GameStateProps = {
   questionNumber: number;
   roundNumber: number;
   guessedCorrectlyThisQuestion: boolean;
+  chatMessages: immutable.List<ChatMessage>;
 };
 
 class GameState extends immutable.Record<GameStateProps>({
@@ -21,6 +23,7 @@ class GameState extends immutable.Record<GameStateProps>({
   questionNumber: 0,
   roundNumber: 0,
   guessedCorrectlyThisQuestion: false,
+  chatMessages: immutable.List(),
 }) {}
 
 export default GameState;
