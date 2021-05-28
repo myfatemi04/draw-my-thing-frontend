@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import GameMain from "./modules/GameMain/GameMain";
+import GameMain from "./modules/Game/GameMain";
 import InitializationProvider from "./modules/Initialization/InitializationProvider";
 
 export default function App() {
