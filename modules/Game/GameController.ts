@@ -68,13 +68,8 @@ class GameController {
 
     this.addSocketCallback(
       "question-started",
-      (playerID, questionNumber, hintLength, endTime) => {
-        this.gameSDK.setCurrentQuestion(
-          playerID,
-          questionNumber,
-          hintLength,
-          endTime
-        );
+      (playerID, hintLength, endTime) => {
+        this.gameSDK.setCurrentQuestion(playerID, hintLength, endTime);
       }
     );
 
@@ -136,28 +131,36 @@ class GameController {
     this.callbacks[event] = callback;
   }
 
+  private emit(event: string, ...args: any[]) {
+    if (!this.io) {
+      console.warn("[game controller] io is null");
+    } else {
+      this.io.emit(event, ...args);
+    }
+  }
+
   sendPathStart(x: number, y: number) {
-    this.io.emit("path-start", x, y);
+    this.emit("path-start", x, y);
   }
 
   sendPathMove(x: number, y: number) {
-    this.io.emit("path-move", x, y);
+    this.emit("path-move", x, y);
   }
 
   sendPathEnd() {
-    this.io.emit("path-end");
+    this.emit("path-end");
   }
 
   sendColorChange(color: Color) {
-    this.io.emit("set-color", color);
+    this.emit("set-color", color);
   }
 
   sendCanvasClear() {
-    this.io.emit("clear-canvas");
+    this.emit("clear-canvas");
   }
 
   sendChatMessage(content: string) {
-    this.io.emit("send-chat-message", content);
+    this.emit("send-chat-message", content);
   }
 }
 

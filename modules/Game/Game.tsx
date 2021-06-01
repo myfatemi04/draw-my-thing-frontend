@@ -9,8 +9,6 @@ import Lobby from "./Lobby";
 function Game() {
   const state = useGameState();
 
-  console.log("Game state:", state);
-
   let contentView: JSX.Element;
 
   if (state === "waiting") {
@@ -20,6 +18,8 @@ function Game() {
   } else if (state === "playing") {
     contentView = <GameInProgress />;
   }
+
+  contentView = <GameInProgress />;
 
   return (
     <View>

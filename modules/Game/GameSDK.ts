@@ -49,9 +49,14 @@ export type GameEvents = {
   "hint-reveal": [number, string]; // index, letter
 
   /**
+   * If the local player is drawing, we tell them what to draw.
+   */
+  "what-to-draw": [string];
+
+  /**
    * Signals the start of a question.
    */
-  "question-started": [string, number, number, number]; // player id, question number, hint length, end time
+  "question-started": [string, number, number]; // player id, hint length, end time
 
   /**
    * Signals the end of a question.
@@ -187,14 +192,8 @@ class GameSDK {
     this.state = this.state.set("roundNumber", roundNumber);
   }
 
-  setCurrentQuestion(
-    playerID: string,
-    questionNumber: number,
-    hintLength: number,
-    endTime: number
-  ) {
+  setCurrentQuestion(playerID: string, hintLength: number, endTime: number) {
     this.state = this.state
-      .set("questionNumber", questionNumber)
       .set("currentQuestionPlayerID", playerID)
       .set("hintText", "_".repeat(hintLength))
       .set("currentQuestionEndTime", endTime);

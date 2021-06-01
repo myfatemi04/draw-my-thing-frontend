@@ -1,18 +1,26 @@
 import { useContext } from "react";
 import GameContext from "./GameContext";
 
+function use_() {
+  return useContext(GameContext).gameState;
+}
+
 export function useGameState() {
-  return useContext(GameContext).gameState.state;
+  return use_().state;
+}
+
+export function useConnectionState() {
+  return use_().gameConnectionState;
 }
 
 export function useCurrentPlayerID() {
-  return useContext(GameContext).gameState.currentQuestionPlayerID;
+  return use_().currentQuestionPlayerID;
 }
 
 export function useLocalPlayerID() {
-  return useContext(GameContext).gameState.localUserID;
+  return use_().localUserID;
 }
 
 export function usePlayers() {
-  return useContext(GameContext).gameState.players;
+  return use_().players;
 }

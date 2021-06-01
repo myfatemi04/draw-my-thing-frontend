@@ -27,6 +27,7 @@ function GameProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     gameSDK.on("state-update", (state) => {
+      console.log("[game provider] state update:", state.toJSON());
       setGameState(state);
     });
   }, []);

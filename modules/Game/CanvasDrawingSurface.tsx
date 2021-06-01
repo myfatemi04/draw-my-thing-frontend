@@ -1,6 +1,12 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { Button, StyleSheet, View, ViewProps } from "react-native";
-import Canvas from "react-native-canvas";
+import Canvas from "./Canvas";
 import ColorPicker, { Color } from "./ColorPicker";
 import GameContext from "./GameContext";
 
@@ -63,6 +69,18 @@ function CanvasDrawingSurface({ active }: { active: boolean }) {
     }
   }, [canvasSDK, gameController, color, active]);
 
+  const activeProps = useMemo(
+    () =>
+      active
+        ? {
+            onTouchStart,
+            onTouchMove,
+            onTouchEnd,
+          }
+        : {},
+    [active]
+  );
+
   return (
     <>
       <View
@@ -71,13 +89,7 @@ function CanvasDrawingSurface({ active }: { active: boolean }) {
           canvasSDK.setSize(width, height);
         }}
         style={styles.canvasContainer}
-        {...(active
-          ? {
-              onTouchStart,
-              onTouchMove,
-              onTouchEnd,
-            }
-          : {})}
+        {...activeProps}
       >
         <Canvas ref={setCanvas} style={styles.canvasContainer} />
       </View>
@@ -96,8 +108,9 @@ function CanvasDrawingSurface({ active }: { active: boolean }) {
 
 const styles = StyleSheet.create({
   canvasContainer: {
-    width: 400,
-    height: 400,
+    marginLeft: 0,
+    marginRight: 0,
+    maxHeight: 400,
     borderColor: "black",
     borderWidth: 2,
   },

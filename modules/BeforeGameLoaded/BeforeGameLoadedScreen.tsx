@@ -1,24 +1,20 @@
 import React, { useCallback, useContext, useState } from "react";
-import { TextInput, View, Button, StyleSheet } from "react-native";
+import { Button, StyleSheet, TextInput, View } from "react-native";
 import ConnectionStatusIndicator from "../Debug/ConnectionStatusIndicator";
-import InitializationContext from "../Initialization/InitializationContext";
+import GameContext from "../Game/GameContext";
+import { useConnectionState } from "../Game/GameHooks";
 import UIText from "../ui/UIText";
 
 export default function BeforeGameLoadedScreen() {
   const [temporaryRoomID, setTemporaryRoomID] = useState("");
-  const { joinRoom, createRoom, cancelJoinRoom, connectionStatus } = useContext(
-    InitializationContext
-  );
+  const { gameController } = useContext(GameContext);
+  const connectionState = useConnectionState();
 
   const onPressJoin = () => {
     if (temporaryRoomID.length > 0) {
-      joinRoom(temporaryRoomID);
+      gameController.connect("http://localhost:7000");
     }
   };
-
-  const onPressCreate = useCallback(() => {
-    createRoom();
-  }, []);
 
   const onChangeText = useCallback((text: string) => {
     setTemporaryRoomID(text);
@@ -31,19 +27,19 @@ export default function BeforeGameLoadedScreen() {
         onChangeText={onChangeText}
         maxLength={10}
         style={styles.text}
-        editable={connectionStatus !== "connecting"}
+        editable={connectionState !== "connecting"}
       />
       <ConnectionStatusIndicator />
-      {connectionStatus !== "connecting" ? (
+      {connectionState !== "connecting" ? (
         <Button
           onPress={onPressJoin}
           title="Join"
           disabled={temporaryRoomID.length === 0}
         />
-      ) : (
-        <Button onPress={cancelJoinRoom} title="Cancel" />
-      )}
-      <Button onPress={onPressCreate} title="Create" />
+      ) : null
+      // <Button onPress={cancelJoinRoom} title="Cancel" />
+      }
+      {/* <Button onPress={onPressCreate} title="Create" /> */}
     </View>
   );
 }

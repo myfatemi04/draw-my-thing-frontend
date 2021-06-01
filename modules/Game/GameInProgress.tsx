@@ -3,7 +3,6 @@ import { StyleSheet, View } from "react-native";
 import UIText from "../ui/UIText";
 import CanvasDrawingSurface from "./CanvasDrawingSurface";
 import { useCurrentPlayerID, useLocalPlayerID } from "./GameHooks";
-import LeaveGameButton from "./LeaveGameButton";
 
 function GameInProgress() {
   const currentPlayerID = useCurrentPlayerID();

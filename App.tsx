@@ -1,14 +1,14 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import GameMain from "./modules/Game/GameMain";
-import InitializationProvider from "./modules/Initialization/InitializationProvider";
+import GameConnectionStateSwitch from "./modules/Game/GameConnectionStateSwitch";
+import GameProvider from "./modules/Game/GameProvider";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <InitializationProvider>
-        <GameMain />
-      </InitializationProvider>
+      <GameProvider>
+        <GameConnectionStateSwitch />
+      </GameProvider>
     </View>
   );
 }

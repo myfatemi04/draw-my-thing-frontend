@@ -1,12 +1,4 @@
-import Canvas, { CanvasRenderingContext2D } from "react-native-canvas";
-
-type CanvasComponent = {
-  type: "circle";
-  radius: number;
-  x: number;
-  y: number;
-  color: string;
-};
+import Canvas, { CanvasRenderingContext2D } from "./Canvas";
 
 class CanvasSDK {
   private canvas: Canvas;
@@ -22,10 +14,14 @@ class CanvasSDK {
 
   setCanvas(canvas: Canvas) {
     this.canvas = canvas;
-    this.canvas.width = this.width;
-    this.canvas.height = this.height;
-    this.context = canvas.getContext("2d");
-    this.context.strokeStyle = this.strokeColor;
+    if (canvas == null) {
+      this.context = null;
+    } else {
+      this.canvas.width = this.width;
+      this.canvas.height = this.height;
+      this.context = canvas.get2D();
+      this.context.strokeStyle = this.strokeColor;
+    }
   }
 
   setSize(width: number, height: number) {
