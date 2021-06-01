@@ -23,9 +23,18 @@ class GameController {
     this.canvasSDK = canvasSDK;
   }
 
-  connect(gameServerURL: string) {
+  createAndConnect(gameServerURL: string) {
     this.io = connect(gameServerURL);
     this.addSocketCallbacks();
+    this.gameSDK.setConnectionState("connecting");
+    this.io.emit("create and join room");
+  }
+
+  connect(roomID: string, gameServerURL: string) {
+    this.io = connect(gameServerURL);
+    this.addSocketCallbacks();
+    this.io.emit("join room", roomID);
+    this.gameSDK.setConnectionState("connecting");
   }
 
   disconnect() {
@@ -34,6 +43,19 @@ class GameController {
   }
 
   addSocketCallbacks() {
+    this.addSocketCallback("connected", (gameID) => {
+      this.gameSDK.setConnectionState("connected");
+      this.gameSDK.setGameID(gameID);
+    });
+
+    this.addSocketCallback("already-in-room", () => {
+      console.error("Already in a room.");
+    });
+
+    this.addSocketCallback("room-not-found", () => {
+      this.gameSDK.setConnectionState("errored");
+    });
+
     this.addSocketCallback("path-started", (x, y) => {
       this.canvasSDK.startPath(x, y);
     });

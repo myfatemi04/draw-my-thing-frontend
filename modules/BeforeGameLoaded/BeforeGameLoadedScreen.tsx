@@ -5,15 +5,23 @@ import GameContext from "../Game/GameContext";
 import { useConnectionState } from "../Game/GameHooks";
 import UIText from "../ui/UIText";
 
+const GAME_SERVER_URL = "http://localhost:7000";
+
 export default function BeforeGameLoadedScreen() {
   const [temporaryRoomID, setTemporaryRoomID] = useState("");
   const { gameController } = useContext(GameContext);
   const connectionState = useConnectionState();
 
+  console.log({ connectionState });
+
   const onPressJoin = () => {
     if (temporaryRoomID.length > 0) {
-      gameController.connect("http://localhost:7000");
+      gameController.connect(temporaryRoomID, GAME_SERVER_URL);
     }
+  };
+
+  const onPressCreate = () => {
+    gameController.createAndConnect(GAME_SERVER_URL);
   };
 
   const onChangeText = useCallback((text: string) => {
@@ -30,16 +38,17 @@ export default function BeforeGameLoadedScreen() {
         editable={connectionState !== "connecting"}
       />
       <ConnectionStatusIndicator />
-      {connectionState !== "connecting" ? (
-        <Button
-          onPress={onPressJoin}
-          title="Join"
-          disabled={temporaryRoomID.length === 0}
-        />
-      ) : null
-      // <Button onPress={cancelJoinRoom} title="Cancel" />
+      {
+        connectionState !== "connecting" ? (
+          <Button
+            onPress={onPressJoin}
+            title="Join"
+            disabled={temporaryRoomID.length === 0}
+          />
+        ) : null
+        // <Button onPress={cancelJoinRoom} title="Cancel" />
       }
-      {/* <Button onPress={onPressCreate} title="Create" /> */}
+      <Button onPress={onPressCreate} title="Create" />
     </View>
   );
 }

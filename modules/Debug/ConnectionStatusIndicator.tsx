@@ -1,13 +1,13 @@
-import React, { useContext } from "react";
-import { View, Text, StyleSheet } from "react-native";
-import InitializationContext from "../Initialization/InitializationContext";
+import React from "react";
+import { StyleSheet, Text } from "react-native";
+import { useConnectionState } from "../Game/GameHooks";
 
 export default function ConnectionStatusIndicator() {
-  const { connectionStatus } = useContext(InitializationContext);
+  const connectionState = useConnectionState();
 
   return (
     <Text style={styles.baseText}>
-      Connection status: {connectionStatus ?? "none"}
+      Connection status: {connectionState ?? "none"}
     </Text>
   );
 }

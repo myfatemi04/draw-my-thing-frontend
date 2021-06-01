@@ -1,11 +1,17 @@
 import replaceStringCharacter from "../lib/replaceStringCharacter";
 import ChatMessage from "./ChatMessage";
-import { Color } from "./ColorPicker";
 import GameState from "./GameState";
 import Player from "./Player";
 import * as immutable from "immutable";
 
 export type GameEvents = {
+  /**
+   * Signals that the connection to the game server succeeded
+   */
+  connected: [string]; // roomID
+  "already-in-room": [];
+  "room-not-found": [];
+
   /**
    * Signals that the current player put the paintbrush down.
    */
@@ -110,7 +116,7 @@ export type GameEvents = {
 class GameSDK {
   private callbacks = new Map<keyof GameEvents, Set<Function>>();
 
-  private _state: GameState;
+  private _state = new GameState();
   private set state(state: GameState) {
     this._state = state;
     this.emit("state-update", state);
@@ -138,6 +144,14 @@ class GameSDK {
     if (set) {
       set.forEach((callback) => callback(...args));
     }
+  }
+
+  setGameID(id: string) {
+    this.state = this.state.set("gameID", id);
+  }
+
+  setConnectionState(state: GameState["gameConnectionState"]) {
+    this.state = this.state.set("gameConnectionState", state);
   }
 
   addPlayer(id: string, nickname: string, points = 0) {
