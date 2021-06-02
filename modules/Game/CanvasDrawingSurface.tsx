@@ -78,7 +78,7 @@ function CanvasDrawingSurface({ active }: { active: boolean }) {
             onTouchEnd,
           }
         : {},
-    [active]
+    [active, onTouchStart, onTouchMove, onTouchEnd]
   );
 
   return (

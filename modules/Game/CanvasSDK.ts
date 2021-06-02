@@ -53,6 +53,7 @@ class CanvasSDK {
         this.context.closePath();
         this.context.beginPath();
       }
+      this.inPath = false;
     }
   }
 
@@ -62,11 +63,12 @@ class CanvasSDK {
         "Starting path while already in a path. Should never happen. Breaking previous path."
       );
       this.breakPath();
-    }
-    this.inPath = true;
-    if (this.context) {
-      this.context.beginPath();
-      this.context.moveTo(x, y);
+    } else {
+      if (this.context) {
+        this.context.beginPath();
+        this.context.moveTo(x, y);
+      }
+      this.inPath = true;
     }
   }
 
@@ -77,10 +79,11 @@ class CanvasSDK {
       );
       this.startPath(x, y);
       return;
-    }
-    if (this.context) {
-      this.context.lineTo(x, y);
-      this.context.stroke();
+    } else {
+      if (this.context) {
+        this.context.lineTo(x, y);
+        this.context.stroke();
+      }
     }
   }
 
@@ -93,6 +96,7 @@ class CanvasSDK {
       if (this.context) {
         this.context.closePath();
       }
+      this.inPath = false;
     }
   }
 }

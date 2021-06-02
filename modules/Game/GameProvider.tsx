@@ -18,7 +18,6 @@ function GameProvider({ children }: { children: ReactNode }) {
   const gameController = useMemo(() => new GameController(), []);
 
   useEffect(() => {
-    console.log("Game SDK has been initialized");
     gameController.setGameSDK(gameSDK);
   }, [gameController, gameSDK]);
 
@@ -28,7 +27,6 @@ function GameProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     gameSDK.on("state-update", (state) => {
-      console.log("[game provider] state update:", state.toJSON());
       setGameState(state);
     });
   }, []);

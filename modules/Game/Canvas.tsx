@@ -51,12 +51,7 @@ class Canvas extends Component<Props> {
     if (Platform.OS === "web") {
       return (
         <View style={style}>
-          <canvas
-            ref={(canvas) => {
-              this.canvas = canvas;
-              console.log("Received web canvas object:", canvas);
-            }}
-          />
+          <canvas ref={(canvas) => (this.canvas = canvas)} />
         </View>
       );
     } else {

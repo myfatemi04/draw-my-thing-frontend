@@ -24,7 +24,7 @@ class GameController {
   }
 
   createAndConnect(gameServerURL: string) {
-    console.log("connecting to", gameServerURL);
+    console.log("Game Controller: Connecting to", gameServerURL);
     this.io = connect(gameServerURL);
     this.addSocketCallbacks();
     this.gameSDK.setConnectionState("connecting");
