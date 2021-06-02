@@ -5,6 +5,10 @@ function use_() {
   return useContext(GameContext).gameState;
 }
 
+export function useStartTime() {
+  return use_().gameStartTime;
+}
+
 export function useGameState() {
   return use_().state;
 }

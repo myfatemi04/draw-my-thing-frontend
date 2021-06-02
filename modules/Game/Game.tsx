@@ -19,8 +19,6 @@ function Game() {
     contentView = <GameInProgress />;
   }
 
-  contentView = <GameInProgress />;
-
   return (
     <View>
       {contentView}

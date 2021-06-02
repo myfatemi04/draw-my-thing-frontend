@@ -80,6 +80,11 @@ export type GameEvents = {
   "round-ended": [number, number]; // questions answered correctly, total questions given
 
   /**
+   * Signals that the game will start soon.
+   */
+  "game-will-start": [number]; // when the game will start
+
+  /**
    * Signals the start of a game.
    */
   "game-started": [number]; // total round count
@@ -144,6 +149,10 @@ class GameSDK {
     if (set) {
       set.forEach((callback) => callback(...args));
     }
+  }
+
+  gameWillStart(startTime: number) {
+    this.state = this.state.set("gameStartTime", startTime);
   }
 
   setGameID(id: string) {

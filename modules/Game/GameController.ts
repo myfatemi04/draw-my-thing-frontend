@@ -109,6 +109,10 @@ class GameController {
       console.warn("TODO: implement round-ended callback");
     });
 
+    this.addSocketCallback("game-will-start", (startTime) => {
+      this.gameSDK.gameWillStart(startTime);
+    });
+
     this.addSocketCallback("game-started", (roundCount) => {
       this.gameSDK.gameStarted(roundCount);
     });
