@@ -44,4 +44,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "grey",
   },
+  caption: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: "grey",
+  },
 });

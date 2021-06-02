@@ -23,18 +23,18 @@ class GameController {
     this.canvasSDK = canvasSDK;
   }
 
-  createAndConnect(gameServerURL: string) {
+  createAndConnect(gameServerURL: string, username: string) {
     console.log("Game Controller: Connecting to", gameServerURL);
     this.io = connect(gameServerURL);
     this.addSocketCallbacks();
     this.gameSDK.setConnectionState("connecting");
-    this.io.emit("create and join room", "anon");
+    this.io.emit("create and join room", username);
   }
 
-  connect(roomID: string, gameServerURL: string) {
+  connect(roomID: string, gameServerURL: string, username: string) {
     this.io = connect(gameServerURL);
     this.addSocketCallbacks();
-    this.io.emit("join room", roomID, "anon");
+    this.io.emit("join room", roomID, username);
     this.gameSDK.setConnectionState("connecting");
   }
 

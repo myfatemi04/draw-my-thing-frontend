@@ -9,30 +9,37 @@ const GAME_SERVER_URL = "http://192.168.0.13:7000";
 
 export default function BeforeGameLoadedScreen() {
   const [temporaryRoomID, setTemporaryRoomID] = useState("");
+  const [username, setUsername] = useState("");
   const { gameController } = useContext(GameContext);
   const connectionState = useConnectionState();
 
-  const onPressJoin = () => {
+  const onPressJoin = useCallback(() => {
     if (temporaryRoomID.length > 0) {
-      gameController.connect(temporaryRoomID, GAME_SERVER_URL);
+      gameController.connect(temporaryRoomID, GAME_SERVER_URL, username);
     }
-  };
+  }, [gameController, temporaryRoomID, username]);
 
-  const onPressCreate = () => {
-    gameController.createAndConnect(GAME_SERVER_URL);
-  };
-
-  const onChangeText = useCallback((text: string) => {
-    setTemporaryRoomID(text);
-  }, []);
+  const onPressCreate = useCallback(() => {
+    gameController.createAndConnect(GAME_SERVER_URL, username);
+  }, [gameController, username]);
 
   return (
     <View style={styles.screen}>
       <UIText variant="header">Draw My Thing</UIText>
+      <UIText variant="caption" style={{ marginTop: 20 }}>
+        Username
+      </UIText>
       <TextInput
-        onChangeText={onChangeText}
+        onChangeText={setUsername}
+        maxLength={40}
+        style={styles.inputUsername}
+        editable={connectionState !== "connecting"}
+      />
+      <UIText variant="caption">Code</UIText>
+      <TextInput
+        onChangeText={setTemporaryRoomID}
         maxLength={10}
-        style={styles.text}
+        style={styles.inputGameID}
         editable={connectionState !== "connecting"}
       />
       <ConnectionStatusIndicator />
@@ -50,7 +57,7 @@ export default function BeforeGameLoadedScreen() {
             <Button
               onPress={onPressJoin}
               title="Join"
-              disabled={temporaryRoomID.length === 0}
+              disabled={temporaryRoomID.length === 0 || username.length === 0}
             />
           ) : null
           // <Button onPress={cancelJoinRoom} title="Cancel" />
@@ -67,18 +74,26 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  text: {
+  inputGameID: {
     borderColor: "#000000",
     borderWidth: 1,
     borderRadius: 2,
 
-    marginTop: 25,
     marginBottom: 25,
 
     padding: 10,
 
     width: 240,
-    fontSize: 35,
+    fontSize: 30,
+  },
+  inputUsername: {
+    borderColor: "#000000",
+    borderWidth: 1,
+    borderRadius: 2,
+
+    padding: 5,
+
+    fontSize: 20,
   },
   button: {
     marginTop: 50,
