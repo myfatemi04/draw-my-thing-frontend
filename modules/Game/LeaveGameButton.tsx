@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { Button } from "react-native";
-import InitializationContext from "../Initialization/InitializationContext";
+import GameContext from "./GameContext";
 
 function LeaveGameButton() {
-  const { leaveRoom } = useContext(InitializationContext);
-  return <Button onPress={() => leaveRoom()} title="Leave" />;
+  const { gameController } = useContext(GameContext);
+  return <Button onPress={() => gameController.disconnect()} title="Leave" />;
 }
 
 export default LeaveGameButton;

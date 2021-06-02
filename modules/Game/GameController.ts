@@ -24,6 +24,7 @@ class GameController {
   }
 
   createAndConnect(gameServerURL: string) {
+    console.log("connecting to", gameServerURL);
     this.io = connect(gameServerURL);
     this.addSocketCallbacks();
     this.gameSDK.setConnectionState("connecting");
@@ -40,6 +41,7 @@ class GameController {
   disconnect() {
     this.removeSocketCallbacks();
     this.io = null;
+    this.gameSDK.setConnectionState(null);
   }
 
   addSocketCallbacks() {
@@ -139,8 +141,10 @@ class GameController {
   }
 
   removeSocketCallbacks() {
-    for (let [event, callback] of Object.entries(this.callbacks)) {
-      this.io.off(event, callback);
+    if (this.io) {
+      for (let [event, callback] of Object.entries(this.callbacks)) {
+        this.io.off(event, callback);
+      }
     }
   }
 

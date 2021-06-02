@@ -5,14 +5,12 @@ import GameContext from "../Game/GameContext";
 import { useConnectionState } from "../Game/GameHooks";
 import UIText from "../ui/UIText";
 
-const GAME_SERVER_URL = "http://localhost:7000";
+const GAME_SERVER_URL = "http://192.168.0.13:7000";
 
 export default function BeforeGameLoadedScreen() {
   const [temporaryRoomID, setTemporaryRoomID] = useState("");
   const { gameController } = useContext(GameContext);
   const connectionState = useConnectionState();
-
-  console.log({ connectionState });
 
   const onPressJoin = () => {
     if (temporaryRoomID.length > 0) {
