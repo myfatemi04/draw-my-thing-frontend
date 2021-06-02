@@ -43,11 +43,7 @@ class Canvas extends Component<Props> {
   }
 
   get2D(): MobileCanvasRenderingContext2D | CanvasRenderingContext2D {
-    if (this.canvas instanceof MobileCanvas) {
-      return this.canvas.getContext("2d");
-    } else {
-      return this.canvas.getContext("2d");
-    }
+    return this.canvas.getContext("2d");
   }
 
   render() {
@@ -55,7 +51,12 @@ class Canvas extends Component<Props> {
     if (Platform.OS === "web") {
       return (
         <View style={style}>
-          <canvas ref={(canvas) => (this.canvas = canvas)} />
+          <canvas
+            ref={(canvas) => {
+              this.canvas = canvas;
+              console.log("Received web canvas object:", canvas);
+            }}
+          />
         </View>
       );
     } else {

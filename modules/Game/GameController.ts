@@ -27,13 +27,13 @@ class GameController {
     this.io = connect(gameServerURL);
     this.addSocketCallbacks();
     this.gameSDK.setConnectionState("connecting");
-    this.io.emit("create and join room");
+    this.io.emit("create and join room", "anon");
   }
 
   connect(roomID: string, gameServerURL: string) {
     this.io = connect(gameServerURL);
     this.addSocketCallbacks();
-    this.io.emit("join room", roomID);
+    this.io.emit("join room", roomID, "anon");
     this.gameSDK.setConnectionState("connecting");
   }
 

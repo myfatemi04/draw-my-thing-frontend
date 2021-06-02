@@ -71,7 +71,7 @@ function CanvasDrawingSurface({ active }: { active: boolean }) {
 
   const activeProps = useMemo(
     () =>
-      active
+      active || true
         ? {
             onTouchStart,
             onTouchMove,

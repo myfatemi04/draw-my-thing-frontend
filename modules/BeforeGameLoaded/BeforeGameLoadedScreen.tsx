@@ -38,17 +38,27 @@ export default function BeforeGameLoadedScreen() {
         editable={connectionState !== "connecting"}
       />
       <ConnectionStatusIndicator />
-      {
-        connectionState !== "connecting" ? (
-          <Button
-            onPress={onPressJoin}
-            title="Join"
-            disabled={temporaryRoomID.length === 0}
-          />
-        ) : null
-        // <Button onPress={cancelJoinRoom} title="Cancel" />
-      }
-      <Button onPress={onPressCreate} title="Create" />
+      <View
+        style={{
+          marginBottom: 10,
+          marginTop: 10,
+          display: "flex",
+          flexDirection: "column",
+          width: "100%",
+        }}
+      >
+        {
+          connectionState !== "connecting" ? (
+            <Button
+              onPress={onPressJoin}
+              title="Join"
+              disabled={temporaryRoomID.length === 0}
+            />
+          ) : null
+          // <Button onPress={cancelJoinRoom} title="Cancel" />
+        }
+        <Button onPress={onPressCreate} title="Create" />
+      </View>
     </View>
   );
 }
