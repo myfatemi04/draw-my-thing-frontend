@@ -41,7 +41,7 @@ class GameController {
   disconnect() {
     this.removeSocketCallbacks();
     this.io = null;
-    this.gameSDK.setConnectionState(null);
+    this.gameSDK.leaveGame();
   }
 
   addSocketCallbacks() {

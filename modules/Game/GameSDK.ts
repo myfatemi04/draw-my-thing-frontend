@@ -155,6 +155,13 @@ class GameSDK {
     this.state = this.state.set("gameStartTime", startTime);
   }
 
+  leaveGame() {
+    this.state = this.state
+      .set("gameConnectionState", null)
+      .set("gameStartTime", -1)
+      .set("gameID", "");
+  }
+
   setGameID(id: string) {
     this.state = this.state.set("gameID", id);
   }
