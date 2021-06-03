@@ -11,15 +11,13 @@ import GameController from "./GameController";
 import GameSDK from "./GameSDK";
 import GameState from "./GameState";
 
+const GAME_URL = "172.20.10.4:7000";
+
 function GameProvider({ children }: { children: ReactNode }) {
   const [gameState, setGameState] = useState<GameState>(() => new GameState());
   const canvasSDK = useMemo(() => new CanvasSDK(), []);
   const gameSDK = useMemo(() => new GameSDK(), []);
-  const gameController = useMemo(() => new GameController(), []);
-
-  useEffect(() => {
-    gameController.setGameSDK(gameSDK);
-  }, [gameController, gameSDK]);
+  const gameController = useMemo(() => new GameController(GAME_URL), []);
 
   useEffect(() => {
     gameController.setCanvasSDK(canvasSDK);
