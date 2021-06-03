@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { Button, StyleSheet, View, ViewProps } from "react-native";
+import { Button, Platform, StyleSheet, View, ViewProps } from "react-native";
 import { Accelerometer } from "expo-sensors";
 import Canvas from "./Canvas";
 import ColorPicker, { Color } from "./ColorPicker";
@@ -114,7 +114,7 @@ function CanvasDrawingSurface({ active }: { active: boolean }) {
       <View
         onLayout={({ nativeEvent }) => {
           const { width, height } = nativeEvent.layout;
-          canvasSDK.setSize(width, height);
+          canvasSDK.setSize(width - 4, height - 4);
         }}
         style={styles.canvasContainer}
         {...activeProps}
@@ -127,7 +127,9 @@ function CanvasDrawingSurface({ active }: { active: boolean }) {
             color={color}
             onPickedColor={(color) => setColor(color)}
           />
-          <Button onPress={() => clear()} title="Clear" />
+          {Platform.OS === "web" && (
+            <Button onPress={() => clear()} title="Clear" />
+          )}
         </>
       )}
     </>
@@ -141,6 +143,7 @@ const styles = StyleSheet.create({
     maxHeight: 400,
     borderColor: "black",
     borderWidth: 2,
+    maxWidth: "100%",
   },
   canvas: {
     width: "100%",

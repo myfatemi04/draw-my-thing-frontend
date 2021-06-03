@@ -19,7 +19,11 @@ export default function ColorPicker({
   return (
     <View style={style.container}>
       <UIText variant="body">Choose Color</UIText>
-      <UIRow spacing={10} centerHorizontal style={{ marginTop: 10 }}>
+      <UIRow
+        spacing={10}
+        centerHorizontal
+        style={{ marginTop: 10, width: "100%" }}
+      >
         {colors.map((color) => {
           return (
             <UICircle
@@ -41,5 +45,6 @@ const style = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    width: "100%",
   } as ViewStyle,
 });
