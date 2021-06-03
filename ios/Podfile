@@ -18,4 +18,8 @@ target 'drawmythingfrontend' do
   #     flipper_post_install(installer)
   #   end
   # end
+  pod 'react-native-shake', :path => '../node_modules/react-native-shake'
+
+  pod 'RNSensors', :path => '../node_modules/react-native-sensors'
+
 end

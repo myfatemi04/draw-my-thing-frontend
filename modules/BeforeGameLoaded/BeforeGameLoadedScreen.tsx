@@ -5,7 +5,7 @@ import GameContext from "../Game/GameContext";
 import { useConnectionState } from "../Game/GameHooks";
 import UIText from "../ui/UIText";
 
-const GAME_SERVER_URL = "http://192.168.0.13:7000";
+const GAME_SERVER_URL = "http://172.20.10.4:7000";
 
 export default function BeforeGameLoadedScreen() {
   const [temporaryRoomID, setTemporaryRoomID] = useState("");
@@ -91,8 +91,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 2,
 
+    marginBottom: 25,
+
     padding: 5,
 
+    width: 240,
     fontSize: 20,
   },
   button: {

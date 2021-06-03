@@ -6,15 +6,43 @@ import React, {
   useState,
 } from "react";
 import { Button, StyleSheet, View, ViewProps } from "react-native";
+import { Accelerometer } from "expo-sensors";
 import Canvas from "./Canvas";
 import ColorPicker, { Color } from "./ColorPicker";
 import GameContext from "./GameContext";
+
+function magnitude({ x, y, z }: { x: number; y: number; z: number }) {
+  return (x ** 2 + y ** 2 + z ** 2) ** 0.5;
+}
+
+const SHAKE_MINIMUM_MAGNITUDE = 3;
 
 function CanvasDrawingSurface({ active }: { active: boolean }) {
   const { canvasSDK, gameController } = useContext(GameContext);
 
   const [touchIdentifier, setTouchIdentifier] = useState<string>(null);
   const [color, setColor] = useState<Color>("black");
+
+  useEffect(() => {
+    let hasShake = false;
+
+    const listener = Accelerometer.addListener((d) => {
+      const m = magnitude(d);
+      if (m > SHAKE_MINIMUM_MAGNITUDE) {
+        if (!hasShake) {
+          hasShake = true;
+        } else {
+          canvasSDK.clear();
+        }
+      } else {
+        hasShake = false;
+      }
+    });
+
+    return () => {
+      listener.remove();
+    };
+  }, [canvasSDK]);
 
   const setCanvas = useCallback(
     (canvas: Canvas) => {
